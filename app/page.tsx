@@ -1,10 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ShoppingCart, Coffee, Soup, Pizza, Utensils, Sandwich, Salad, ChefHat, Carrot, Wheat, IceCream, Milk, Clipboard, Copy, FileDown, Image } from 'lucide-react'
+import { toPng } from 'html-to-image'
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import { MenuPDF } from '@/components/MenuPDF'
 
 const menuItems = {
   Beverages: [
@@ -215,6 +218,7 @@ export default function Home() {
 
 export function RestaurantMenuComponent() {
   const [selectedItems, setSelectedItems] = useState<{ [key: string]: string[] }>({})
+  const selectionRef = useRef<HTMLDivElement>(null)
 
   const toggleItem = (category: string, item: string) => {
     setSelectedItems(prev => {
@@ -225,6 +229,31 @@ export function RestaurantMenuComponent() {
         return { ...prev, [category]: [...categoryItems, item] }
       }
     })
+  }
+
+  const copySelection = () => {
+    const text = Object.entries(selectedItems)
+      .filter(([_, items]) => items.length > 0)
+      .map(([category, items]) => `${category}:\n${items.join('\n')}`)
+      .join('\n\n')
+    navigator.clipboard.writeText(text)
+      .then(() => alert('Selection copied to clipboard!'))
+      .catch(err => console.error('Failed to copy: ', err))
+  }
+
+  const saveAsImage = () => {
+    if (selectionRef.current) {
+      toPng(selectionRef.current, { quality: 0.95 })
+        .then((dataUrl) => {
+          const link = document.createElement('a')
+          link.download = 'menu-selection.png'
+          link.href = dataUrl
+          link.click()
+        })
+        .catch((err) => {
+          console.error('Error saving image:', err)
+        })
+    }
   }
 
   return (
@@ -275,7 +304,7 @@ export function RestaurantMenuComponent() {
               <ShoppingCart className="w-6 h-6 text-amber-600" />
             </CardTitle>
           </CardHeader>
-          <CardContent className="mt-4">
+          <CardContent className="mt-4" ref={selectionRef}>
             {Object.keys(selectedItems).length > 0 ? (
               <div className="space-y-6">
                 {Object.entries(selectedItems).map(([category, items]) => (
@@ -304,13 +333,30 @@ export function RestaurantMenuComponent() {
             )}
           </CardContent>
           <CardFooter className="border-t-0 flex flex-col sm:flex-row gap-4">
-            <Button className="w-full sm:w-1/3 bg-amber-600 hover:bg-amber-700 text-white text-lg py-6 flex items-center justify-center">
+            <Button 
+              className="w-full sm:w-1/3 bg-amber-600 hover:bg-amber-700 text-white text-lg py-6 flex items-center justify-center"
+              onClick={copySelection}
+            >
               <Copy className="mr-2 h-5 w-5" /> Copy
             </Button>
-            <Button className="w-full sm:w-1/3 bg-amber-600 hover:bg-amber-700 text-white text-lg py-6 flex items-center justify-center">
-              <FileDown className="mr-2 h-5 w-5" /> Save as PDF
-            </Button>
-            <Button className="w-full sm:w-1/3 bg-amber-600 hover:bg-amber-700 text-white text-lg py-6 flex items-center justify-center">
+            <PDFDownloadLink
+              document={<MenuPDF selectedItems={selectedItems} />}
+              fileName="menu-selection.pdf"
+              className="w-full sm:w-1/3"
+            >
+              {({ loading }: { loading: boolean }) => (
+                <Button 
+                  className="w-full bg-amber-600 hover:bg-amber-700 text-white text-lg py-6 flex items-center justify-center"
+                  disabled={loading}
+                >
+                  <FileDown className="mr-2 h-5 w-5" /> {loading ? 'Loading...' : 'Save as PDF'}
+                </Button>
+              )}
+            </PDFDownloadLink>
+            <Button 
+              className="w-full sm:w-1/3 bg-amber-600 hover:bg-amber-700 text-white text-lg py-6 flex items-center justify-center"
+              onClick={saveAsImage}
+            >
               <Image className="mr-2 h-5 w-5" /> Save as Image
             </Button>
           </CardFooter>
