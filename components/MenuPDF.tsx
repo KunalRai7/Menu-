@@ -34,12 +34,23 @@ const styles = StyleSheet.create({
     color: '#B45309',
     marginTop: 5,
   },
+  content: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  column: {
+    width: '48%',
+    marginBottom: 10,
+  },
   category: {
     fontSize: 20,
     fontFamily: 'Montserrat',
     color: '#92400E',
     marginTop: 15,
     marginBottom: 10,
+    borderBottom: '1 solid #92400E',
+    paddingBottom: 5,
   },
   item: {
     fontSize: 14,
@@ -60,18 +71,20 @@ export const MenuPDF: React.FC<MenuPDFProps> = ({ selectedItems }) => (
         <Text style={styles.title}>Hotel Prakash & Sons</Text>
         <Text style={styles.subtitle}>Savor the Flavors of Tradition</Text>
       </View>
-      {Object.entries(selectedItems).map(([category, items]) => (
-        items.length > 0 && (
-          <View key={category}>
-            <Text style={styles.category}>{category}</Text>
-            {items.map((item, index) => (
-              <Text key={index} style={styles.item}>
-                • {item}
-              </Text>
-            ))}
-          </View>
-        )
-      ))}
+      <View style={styles.content}>
+        {Object.entries(selectedItems).map(([category, items], index) => (
+          items.length > 0 && (
+            <View key={category} style={styles.column}>
+              <Text style={styles.category}>{category}</Text>
+              {items.map((item, itemIndex) => (
+                <Text key={itemIndex} style={styles.item}>
+                  • {item}
+                </Text>
+              ))}
+            </View>
+          )
+        ))}
+      </View>
     </Page>
   </Document>
 )
