@@ -337,7 +337,8 @@ export default function Home() {
                 fileName="menu-selection.pdf"
                 className="w-full sm:w-1/3"
               >
-                {({ loading, error }) => (
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {({ loading, error }: { loading: boolean; error: Error | null }) => (
                   <Button 
                     className="w-full bg-amber-600 hover:bg-amber-700 text-white text-lg py-6 flex items-center justify-center"
                     disabled={loading}
