@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ShoppingCart, Coffee, Soup, Pizza, Utensils, Sandwich, Salad, ChefHat, Carrot, Wheat, IceCream, Milk, Clipboard, Copy, FileDown, Image } from 'lucide-react'
 import { toPng } from 'html-to-image'
-import { PDFDownloadLink, PDFDownloadLinkProps } from '@react-pdf/renderer'
+import { PDFDownloadLink } from '@react-pdf/renderer'
 import { MenuPDF } from '@/components/MenuPDF'
 
 const menuItems = {
@@ -337,7 +337,7 @@ export default function Home() {
                 fileName="menu-selection.pdf"
                 className="w-full sm:w-1/3"
               >
-                {({ loading }: PDFDownloadLinkProps) => (
+                {({ loading, error }) => (
                   <Button 
                     className="w-full bg-amber-600 hover:bg-amber-700 text-white text-lg py-6 flex items-center justify-center"
                     disabled={loading}
