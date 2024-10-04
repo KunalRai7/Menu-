@@ -272,7 +272,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {Object.entries(menuItems).map(([category, items]) => (
               <Card key={category} className="bg-white shadow-md border-2 border-amber-200 overflow-hidden">
-                <CardHeader className="bg-amber-100 border-b-2 border-amber-200">
+                <CardHeader className="bg-amber-100 border-b-2 border-amber-200 py-3">
                   <CardTitle className="text-2xl text-amber-800 flex items-center justify-between font-sans">
                     <span>{category}</span>
                     <span className="flex items-center justify-center w-8 h-8">
