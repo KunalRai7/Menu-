@@ -58,19 +58,28 @@ const styles = StyleSheet.create({
     color: '#78350F',
     marginBottom: 5,
   },
+  customText: {
+    fontSize: 16,
+    fontFamily: 'Montserrat',
+    color: '#78350F',
+    marginBottom: 15,
+    textAlign: 'center',
+  },
 })
 
 interface MenuPDFProps {
   selectedItems: { [key: string]: string[] }
+  customText: string
 }
 
-export const MenuPDF: React.FC<MenuPDFProps> = ({ selectedItems }) => (
+export const MenuPDF: React.FC<MenuPDFProps> = ({ selectedItems, customText }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.header}>
         <Text style={styles.title}>Hotel Prakash & Sons</Text>
         <Text style={styles.subtitle}>Savor the Flavors of Tradition</Text>
       </View>
+      {customText && <Text style={styles.customText}>{customText}</Text>}
       <View style={styles.content}>
         {Object.entries(selectedItems).map(([category, items], index) => (
           items.length > 0 && (

@@ -7,11 +7,12 @@ import { MenuPDF } from '@/components/MenuPDF'
 
 interface PDFDownloadButtonProps {
   selectedItems: { [key: string]: string[] }
+  customText: string
 }
 
-export default function PDFDownloadButton({ selectedItems }: PDFDownloadButtonProps) {
+export default function PDFDownloadButton({ selectedItems, customText }: PDFDownloadButtonProps) {
   return (
-    <BlobProvider document={<MenuPDF selectedItems={selectedItems} />}>
+    <BlobProvider document={<MenuPDF selectedItems={selectedItems} customText={customText} />}>
       {({ blob, url, loading, error }) => (
         <Button 
           className="w-full sm:w-1/3 bg-amber-600 hover:bg-amber-700 text-white text-lg py-6 flex items-center justify-center"

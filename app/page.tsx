@@ -7,10 +7,12 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { ShoppingCart, Coffee, Soup, Pizza, Utensils, Sandwich, Salad, ChefHat, Carrot, Wheat, IceCream, Milk, Clipboard, Copy, FileDown, Image } from 'lucide-react'
 import { toPng } from 'html-to-image'
 import dynamic from 'next/dynamic'
+import { Textarea } from "@/components/ui/textarea"
 
 // Define the type for the PDFDownloadButton props
 interface PDFDownloadButtonProps {
   selectedItems: { [key: string]: string[] }
+  customText: string
 }
 
 // Dynamically import the PDF components with type annotation
@@ -220,6 +222,7 @@ const categoryIcons: { [key: string]: JSX.Element } = {
 
 export default function Home() {
   const [selectedItems, setSelectedItems] = useState<{ [key: string]: string[] }>({})
+  const [customText, setCustomText] = useState<string>('')
   const selectionRef = useRef<HTMLDivElement>(null)
 
   const toggleItem = (category: string, item: string) => {
@@ -234,10 +237,10 @@ export default function Home() {
   }
 
   const copySelection = () => {
-    const text = Object.entries(selectedItems)
+    const text = `${customText}\n\n${Object.entries(selectedItems)
       .filter(([_, items]) => items.length > 0)
       .map(([category, items]) => `${category}:\n${items.map(item => `• ${item}`).join('\n')}`)
-      .join('\n\n')
+      .join('\n\n')}`
     navigator.clipboard.writeText(text)
       .then(() => alert('Selection copied to clipboard!'))
       .catch(err => console.error('Failed to copy: ', err))
@@ -264,6 +267,7 @@ export default function Home() {
         <div className="container mx-auto">
           <h1 className="text-4xl sm:text-6xl lg:text-7xl text-center text-amber-800 font-cormorant">Hotel Prakash & Sons</h1>
           <p className="text-xl text-center mb-9 text-amber-600 tracking-wide font-dancing-script">Savor the Flavors of Tradition</p>
+          
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {Object.entries(menuItems).map(([category, items]) => (
               <Card key={category} className="bg-white shadow-md border-2 border-amber-200 overflow-hidden">
@@ -300,7 +304,19 @@ export default function Home() {
               </Card>
             ))}
           </div>
-          <Card className="mt-12 bg-white shadow-md border-2 border-amber-200 overflow-hidden">
+
+          {/* Move the Textarea here, just above "Your Selection" */}
+          <div className="mt-12 mb-8">
+            <Textarea
+              placeholder="Enter details (e.g., Date, Name & Special Instructions)"
+              value={customText}
+              onChange={(e) => setCustomText(e.target.value)}
+              className="w-full p-2 border-2 border-amber-200 rounded-md"
+              rows={3}
+            />
+          </div>
+
+          <Card className="mt-8 bg-white shadow-md border-2 border-amber-200 overflow-hidden">
             <CardHeader className="bg-amber-100 border-b-2 border-amber-200">
               <CardTitle className="text-3xl text-amber-800 flex items-center justify-between font-sans">
                 Your Selection
@@ -308,6 +324,10 @@ export default function Home() {
               </CardTitle>
             </CardHeader>
             <CardContent className="mt-4" ref={selectionRef}>
+              {/* Update how custom text is displayed */}
+              {customText && (
+                <pre className="text-lg text-amber-800 font-semibold mb-4 whitespace-pre-wrap font-sans">{customText}</pre>
+              )}
               {Object.keys(selectedItems).length > 0 ? (
                 <div className="space-y-6">
                   {Object.entries(selectedItems).map(([category, items]) => (
@@ -342,7 +362,7 @@ export default function Home() {
               >
                 <Copy className="mr-2 h-5 w-5" /> Copy
               </Button>
-              <DynamicPDFDownloadButton selectedItems={selectedItems} />
+              <DynamicPDFDownloadButton selectedItems={selectedItems} customText={customText} />
               <Button 
                 className="w-full sm:w-1/3 bg-amber-600 hover:bg-amber-700 text-white text-lg py-6 flex items-center justify-center"
                 onClick={saveAsImage}
