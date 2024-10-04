@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ShoppingCart, Coffee, Soup, Pizza, Utensils, Sandwich, Salad, ChefHat, Carrot, Wheat, IceCream, Milk, Clipboard, Copy, FileDown, Image } from 'lucide-react'
 import { toPng } from 'html-to-image'
-import { PDFDownloadLink } from '@react-pdf/renderer'
+import { PDFDownloadLink, PDFDownloadLinkProps } from '@react-pdf/renderer'
 import { MenuPDF } from '@/components/MenuPDF'
 
 const menuItems = {
@@ -226,7 +226,7 @@ export default function Home() {
   const copySelection = () => {
     const text = Object.entries(selectedItems)
       .filter(([_, items]) => items.length > 0)
-      .map(([category, items]) => `${category}:\n${items.join('\n')}`)
+      .map(([category, items]) => `${category}:\n${items.map(item => `• ${item}`).join('\n')}`)
       .join('\n\n')
     navigator.clipboard.writeText(text)
       .then(() => alert('Selection copied to clipboard!'))
@@ -337,7 +337,7 @@ export default function Home() {
                 fileName="menu-selection.pdf"
                 className="w-full sm:w-1/3"
               >
-                {({ loading }: { loading: boolean }) => (
+                {({ loading }: PDFDownloadLinkProps) => (
                   <Button 
                     className="w-full bg-amber-600 hover:bg-amber-700 text-white text-lg py-6 flex items-center justify-center"
                     disabled={loading}
