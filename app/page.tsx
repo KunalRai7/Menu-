@@ -1,101 +1,321 @@
-import Image from "next/image";
+'use client'
+
+import { useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { ShoppingCart, Coffee, Soup, Pizza, Utensils, Sandwich, Salad, ChefHat, Carrot, Wheat, IceCream, Milk, Clipboard, Copy, FileDown, Image } from 'lucide-react'
+
+const menuItems = {
+  Beverages: [
+    "Tea",
+    "Coffee",
+    "Hot Milk",
+    "Lassi",
+    "Butter Milk",
+    "Cold Drinks / Fresh Juice",
+    "Keri Pana",
+    "Mineral Water"
+  ],
+  Soup: [
+    "Tomato Soup",
+    "Tomato Shorba",
+    "Sweet Corn Soup",
+    "Hot & Sour Soup",
+    "Manchow Soup",
+    "Mushroom Soup",
+    "Veg Clear Soup"
+  ],
+  Chat: [
+    "Pani Poori",
+    "Tikki Chat",
+    "Kerala Chat",
+    "Fruit Chat",
+    "Dahi Bada",
+    "Bhalla Papadi",
+    "Paneer Chila",
+    "Pav Bhaji",
+    "Mangore",
+    "Onion Kachori",
+    "Indori Patties",
+    "Bhel Poori"
+  ],
+  Starter: [
+    "Cheese Roll",
+    "Spring Roll",
+    "Cheese Ball",
+    "Finger Chips",
+    "Hara Bhara Kabab",
+    "Paneer Tikka",
+    "Paneer Lehsuni Tikka",
+    "Veg Seekh Kabab",
+    "Veg Lollipop",
+    "Chilli Paneer Dry"
+  ],
+  "South Indian": [
+    "Masala Dosa",
+    "Plain Dosa",
+    "Uttapam",
+    "Vada Sambhar",
+    "Idli Sambhar",
+    "Fried Idli",
+    "Onion Dosa",
+    "Jain Dosa",
+    "Plain Rawa Dosa"
+  ],
+  Chinese: [
+    "Veg Chowmein",
+    "Veg Hakka Noodles",
+    "Veg Schezwan Noodles",
+    "Veg Fried Rice",
+    "Veg Schezwan Rice",
+    "Veg Manchurian",
+    "Veg Kothe",
+    "Veg Choupsey",
+    "Chilli Mushroom"
+  ],
+  Paneer: [
+    "Kadai Paneer",
+    "Paneer Butter Masala",
+    "Palak Paneer",
+    "Paneer Lababdar",
+    "Paneer Do Pyaza",
+    "Methi Mutter Malai",
+    "Mutter Paneer",
+    "Kaju Curry",
+    "Paneer Jalfrezi",
+    "Paneer Hara Bhara",
+    "Paneer Khurchan"
+  ],
+  "Vegetable Dishes": [
+    "Malai Kofta",
+    "Veg Kofta",
+    "Loki Kofta",
+    "Hariyali Kofta",
+    "Corn Palak",
+    "Dum Aloo",
+    "Mix Veg",
+    "Aloo Gobi",
+    "Aloo Capsicum",
+    "Aloo Methi",
+    "Aloo Palak",
+    "Achari Aloo",
+    "Green Peas Masala",
+    "Bhindi Masala",
+    "Bhindi Do Pyaza",
+    "Baingan Ka Bharta",
+    "Gobhi Mutter",
+    "Jeera Aloo",
+    "Methi Aloo",
+    "Gobhi Fry",
+    "Bhindi Kurkuri"
+  ],
+  Dal: [
+    "Dal Fry",
+    "Dal Tadka",
+    "Mix Dal",
+    "Dal Makhani",
+    "Chana Masala",
+    "Rajma Masala",
+    "Kadi Pakoda"
+  ],
+  Rice: [
+    "Steam Rice",
+    "Jeera Rice",
+    "Veg Pulao",
+    "Mutter Pulao",
+    "Dry Fruits Pulao",
+    "Veg Biryani",
+    "Masala Rice"
+  ],
+  Breads: [
+    "Tawa Roti",
+    "Tandoori Roti",
+    "Plain Naan",
+    "Butter Naan",
+    "Lachha Paratha",
+    "Missi Roti",
+    "Makki Ki Roti",
+    "Sada Poori",
+    "Masala Poori",
+    "Methi Poori",
+    "Palak Poori"
+  ],
+  "Desserts & Ice Cream": [
+    "Gulab Jamun",
+    "Mava Bati",
+    "Kala Jamun",
+    "Moong Halwa",
+    "Lauki Halwa (Seasonal)",
+    "Gajar Halwa (Seasonal)",
+    "Jalebi",
+    "Rabdi Jalebi",
+    "Imarti",
+    "Fruit Custard",
+    "Pineapple Custard",
+    "Rasgulla",
+    "Rajbhog",
+    "Rasmalai",
+    "Petha Gilori",
+    "Lachedar Mango",
+    "Indrani",
+    "Vanilla Ice Cream",
+    "Strawberry Ice Cream",
+    "Pista Ice Cream",
+    "Butterscotch Ice Cream",
+    "Tutti Frutti Ice Cream"
+  ],
+  Raita: [
+    "Bundi Raita",
+    "Cucumber Raita",
+    "Loki Raita",
+    "Veg Raita",
+    "Fruit Raita",
+    "Pineapple Raita",
+    "Mint Potato Raita",
+    "Plain Curd"
+  ],
+  "Additional Services": [
+    "Masala Papad",
+    "Mix Pickle",
+    "Sprouts Salad",
+    "Peanut Salad",
+    "Garden Fresh Green Salad",
+    "Russian Salad",
+    "Kachumar Salad",
+    "Pan Counter",
+    "RO Water / Mineral Water"
+  ]
+}
+
+const categoryIcons: { [key: string]: JSX.Element } = {
+  Beverages: <Coffee className="w-6 h-6 text-amber-600" />,
+  Soup: <Soup className="w-6 h-6 text-amber-600" />,
+  Chat: <Pizza className="w-6 h-6 text-amber-600" />,
+  Starter: <Utensils className="w-6 h-6 text-amber-600" />,
+  "South Indian": <Sandwich className="w-6 h-6 text-amber-600" />,
+  Chinese: <Salad className="w-6 h-6 text-amber-600" />,
+  Paneer: <ChefHat className="w-6 h-6 text-amber-600" />,
+  "Vegetable Dishes": <Carrot className="w-6 h-6 text-amber-600" />,
+  Dal: <Soup className="w-6 h-6 text-amber-600" />,
+  Rice: <Wheat className="w-6 h-6 text-amber-600" />,
+  Breads: <Wheat className="w-6 h-6 text-amber-600" />,
+  "Desserts & Ice Cream": <IceCream className="w-6 h-6 text-amber-600" />,
+  Raita: <Milk className="w-6 h-6 text-amber-600" />,
+  "Additional Services": <Clipboard className="w-6 h-6 text-amber-600" />,
+}
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+    <div className="container mx-auto px-4 py-6">
+      <RestaurantMenuComponent />
     </div>
-  );
+  )
+}
+
+export function RestaurantMenuComponent() {
+  const [selectedItems, setSelectedItems] = useState<{ [key: string]: string[] }>({})
+
+  const toggleItem = (category: string, item: string) => {
+    setSelectedItems(prev => {
+      const categoryItems = prev[category] || []
+      if (categoryItems.includes(item)) {
+        return { ...prev, [category]: categoryItems.filter(i => i !== item) }
+      } else {
+        return { ...prev, [category]: [...categoryItems, item] }
+      }
+    })
+  }
+
+  return (
+    <div className="min-h-screen font-montserrat">
+      <div className="container mx-auto">
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl text-center text-amber-800 font-cormorant">Hotel Prakash & Sons</h1>
+        <p className="text-xl text-center mb-9 text-amber-600 tracking-wide font-dancing-script">Savor the Flavors of Tradition</p>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {Object.entries(menuItems).map(([category, items]) => (
+            <Card key={category} className="bg-white shadow-md border-2 border-amber-200 overflow-hidden">
+              <CardHeader className="bg-amber-100 border-b-2 border-amber-200">
+                <CardTitle className="text-2xl text-amber-800 flex items-center justify-between font-sans">
+                  <span>{category}</span>
+                  <span className="flex items-center justify-center w-8 h-8">
+                    {categoryIcons[category]}
+                  </span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="mt-4">
+                <ul className="space-y-3">
+                  {items.map((item, index) => (
+                    <li 
+                      key={index} 
+                      className={`flex items-center justify-between p-2 rounded-md transition-colors duration-200 ${
+                        selectedItems[category]?.includes(item)
+                          ? 'bg-amber-100 text-amber-800 font-medium'
+                          : 'hover:bg-amber-50'
+                      }`}
+                    >
+                      <span className="text-md flex-grow">{item}</span>
+                      <Checkbox
+                        id={`${category}-${item}`}
+                        checked={selectedItems[category]?.includes(item)}
+                        onCheckedChange={() => toggleItem(category, item)}
+                        className="h-5 w-5 flex-shrink-0 ml-2"
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        <Card className="mt-12 bg-white shadow-md border-2 border-amber-200 overflow-hidden">
+          <CardHeader className="bg-amber-100 border-b-2 border-amber-200">
+            <CardTitle className="text-3xl text-amber-800 flex items-center justify-between font-sans">
+              Your Selection
+              <ShoppingCart className="w-6 h-6 text-amber-600" />
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="mt-4">
+            {Object.keys(selectedItems).length > 0 ? (
+              <div className="space-y-6">
+                {Object.entries(selectedItems).map(([category, items]) => (
+                  items.length > 0 && (
+                    <div key={category}>
+                      <h3 className="font-semibold text-2xl text-amber-700 flex items-center mb-2">
+                        {categoryIcons[category]}
+                        <span className="ml-2">{category}</span>
+                      </h3>
+                      <ul className="space-y-3">
+                        {items.map((item, index) => (
+                          <li 
+                            key={index}
+                            className="flex items-center justify-between p-2 rounded-md bg-amber-100 text-amber-800 font-medium"
+                          >
+                            <span className="text-md">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )
+                ))}
+              </div>
+            ) : (
+              <p className="text-amber-700 text-lg">No items selected yet.</p>
+            )}
+          </CardContent>
+          <CardFooter className="border-t-0 flex flex-col sm:flex-row gap-4">
+            <Button className="w-full sm:w-1/3 bg-amber-600 hover:bg-amber-700 text-white text-lg py-6 flex items-center justify-center">
+              <Copy className="mr-2 h-5 w-5" /> Copy
+            </Button>
+            <Button className="w-full sm:w-1/3 bg-amber-600 hover:bg-amber-700 text-white text-lg py-6 flex items-center justify-center">
+              <FileDown className="mr-2 h-5 w-5" /> Save as PDF
+            </Button>
+            <Button className="w-full sm:w-1/3 bg-amber-600 hover:bg-amber-700 text-white text-lg py-6 flex items-center justify-center">
+              <Image className="mr-2 h-5 w-5" /> Save as Image
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
+    </div>
+  )
 }
