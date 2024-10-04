@@ -234,6 +234,7 @@ export default function Home() {
         return { ...prev, [category]: [...categoryItems, item] }
       }
     })
+
   }
 
   const copySelection = () => {
