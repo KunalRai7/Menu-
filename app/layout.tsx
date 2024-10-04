@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
-// Remove the following line
-// import { Montserrat } from "next/font/google";
 import "./globals.css";
-
 
 export const metadata: Metadata = {
   title: "Hotel Prakash and Sons",
   description: "Savor the Flavors of Tradition",
+};
+
+// Add this new export for the viewport
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({
