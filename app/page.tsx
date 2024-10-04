@@ -338,7 +338,7 @@ export default function Home() {
                 className="w-full sm:w-1/3"
               >
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                {({ loading, error }: { loading: boolean; error: Error | null }) => (
+                {({ loading, error }: { loading: any; error: any }) => (
                   <Button 
                     className="w-full bg-amber-600 hover:bg-amber-700 text-white text-lg py-6 flex items-center justify-center"
                     disabled={loading}
