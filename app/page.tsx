@@ -6,8 +6,18 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ShoppingCart, Coffee, Soup, Pizza, Utensils, Sandwich, Salad, ChefHat, Carrot, Wheat, IceCream, Milk, Clipboard, Copy, FileDown, Image } from 'lucide-react'
 import { toPng } from 'html-to-image'
-import { PDFDownloadLink, BlobProvider } from '@react-pdf/renderer'
-import { MenuPDF } from '@/components/MenuPDF'
+import dynamic from 'next/dynamic'
+
+// Define the type for the PDFDownloadButton props
+interface PDFDownloadButtonProps {
+  selectedItems: { [key: string]: string[] }
+}
+
+// Dynamically import the PDF components with type annotation
+const DynamicPDFDownloadButton = dynamic<PDFDownloadButtonProps>(
+  () => import('../components/PDFDownloadButton'),
+  { ssr: false }
+)
 
 const menuItems = {
   Beverages: [
@@ -332,24 +342,7 @@ export default function Home() {
               >
                 <Copy className="mr-2 h-5 w-5" /> Copy
               </Button>
-              <BlobProvider document={<MenuPDF selectedItems={selectedItems} />}>
-                {({ blob, url, loading, error }) => (
-                  <Button 
-                    className="w-full sm:w-1/3 bg-amber-600 hover:bg-amber-700 text-white text-lg py-6 flex items-center justify-center"
-                    disabled={loading}
-                    onClick={() => {
-                      if (url) {
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.download = 'menu-selection.pdf';
-                        link.click();
-                      }
-                    }}
-                  >
-                    <FileDown className="mr-2 h-5 w-5" /> {loading ? 'Loading...' : 'Save as PDF'}
-                  </Button>
-                )}
-              </BlobProvider>
+              <DynamicPDFDownloadButton selectedItems={selectedItems} />
               <Button 
                 className="w-full sm:w-1/3 bg-amber-600 hover:bg-amber-700 text-white text-lg py-6 flex items-center justify-center"
                 onClick={saveAsImage}
