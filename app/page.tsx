@@ -4,7 +4,7 @@ import { useState, useRef } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { ShoppingCart, Coffee, Soup, Pizza, Utensils, Sandwich, Salad, ChefHat, Carrot, Wheat, IceCream, Milk, Clipboard, Copy, FileDown, Image } from 'lucide-react'
+import { ShoppingCart, Coffee, Soup, Pizza, Vegan, Utensils, Sandwich, Salad, ChefHat, Carrot, Wheat, IceCream, Milk, Clipboard, Copy, FileDown, Image } from 'lucide-react'
 import { toPng } from 'html-to-image'
 import dynamic from 'next/dynamic'
 import { Textarea } from "@/components/ui/textarea"
@@ -213,7 +213,7 @@ const categoryIcons: { [key: string]: JSX.Element } = {
   Paneer: <ChefHat className="w-6 h-6 text-amber-600" />,
   "Vegetable Dishes": <Carrot className="w-6 h-6 text-amber-600" />,
   Dal: <Soup className="w-6 h-6 text-amber-600" />,
-  Rice: <Wheat className="w-6 h-6 text-amber-600" />,
+  Rice: <Vegan className="w-6 h-6 text-amber-600" />,
   Breads: <Wheat className="w-6 h-6 text-amber-600" />,
   "Desserts & Ice Cream": <IceCream className="w-6 h-6 text-amber-600" />,
   Raita: <Milk className="w-6 h-6 text-amber-600" />,
