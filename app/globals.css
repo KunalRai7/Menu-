@@ -1,16 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant:wght@400;700&family=Montserrat:wght@400;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-
 @layer base {
   :root {
-    --font-cormorant: 'Cormorant', serif;
-    --font-montserrat: 'Montserrat', sans-serif;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -73,21 +66,21 @@
     @apply bg-background text-foreground;
   }
 }
+
 .font-dancing-script {
-    font-family: 'Dancing Script', cursive;
+  font-family: var(--font-dancing-script);
 }
+
 .font-sans {
-  font-family: var(--font-montserrat), sans-serif;
+  font-family: var(--font-montserrat);
 }
 
 .font-cormorant {
   font-family: var(--font-cormorant);
-  font-display: swap;
 }
 
 .font-montserrat {
   font-family: var(--font-montserrat);
-  font-display: swap;
 }
 
 
